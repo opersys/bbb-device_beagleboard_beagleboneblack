@@ -58,7 +58,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_CHARACTERISTICS := tablet,nosdcard
 
 DEVICE_PACKAGE_OVERLAYS := \
-   device/ti/beagleboneblack/overlay
+	$(LOCAL_PATH)/overlay
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -93,8 +93,8 @@ PRODUCT_PACKAGES += \
 	camera.omap3
 
 # Include SGX if they exist: they won't on the first build
-ifneq ($(wildcard device/ti/beagleboneblack/sgx/system),)
-    $(call inherit-product, device/ti/beagleboneblack/device-sgx.mk)
+ifneq ($(wildcard device/beagleboard/beagleboneblack/sgx/system),)
+    $(call inherit-product, device/beagleboard/beagleboneblack/device-sgx.mk)
 endif
 
 # Configure the Dalvik heap for a device with 512 MiB RAM
