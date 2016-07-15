@@ -37,7 +37,7 @@ static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 char const *const LCD7_FILE
-	= "/sys/class/backlight/pwm-backlight/brightness";
+	= "/sys/class/backlight/backlight.11/brightness";
 char const *const LCD3_FILE
 	= "/sys/class/backlight/tps65217-bl/brightness";
 

@@ -44,9 +44,11 @@ on boot
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
 
 # PWM-Backlight for display brightness on LCD7 Cape
-    chmod 0666 /sys/class/backlight/pwm-backlight/brightness
+    chmod 0666 /sys/class/backlight/backlight.11/brightness
 # PWM-Backlight for display brightness on LCD3 Cape
     chmod 0666 /sys/class/backlight/tps65217-bl/brightness
+# Disable console cursor, which is otherwise visible on the Android display
+    write /sys/class/graphics/fbcon/cursor_blink 0
 
 on fs
     mount_all /fstab.am335xevm
@@ -62,11 +64,13 @@ service pvr /system/bin/sgx/rc.pvr start
     class core
     oneshot
 
-service dhcpcd_eth0 /system/bin/dhcpcd -ABKL -f/system/etc/dhcpcd/dhcpcd.conf
+service dhcpcd_eth0 /system/bin/dhcpcd -aABDKL
+    class main
     disabled
     oneshot
 
 service iprenew_eth0 /system/bin/dhcpcd -n
+    class late_start
     disabled
     oneshot
 

@@ -19,7 +19,7 @@ PRODUCT_COPY_FILES := \
         $(LOCAL_PATH)/fstab.am335xevm-sd:root/fstab.am335xevm
 else
 PRODUCT_COPY_FILES := \
-	$(LOCAL_PATH)/zImage:kernel \
+	$(LOCAL_PATH)/zImage-dtb:kernel \
         $(LOCAL_PATH)/fstab.am335xevm:root/fstab.am335xevm
 endif
 
@@ -37,11 +37,23 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml
+
+# Need AppWidget permission to prevent Launcher[2|3] crashing
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.app_widgets.xml:system/etc/permissions/android.software.app_widgets.xml
 
 # KeyPads
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/ti-tsc.idc:system/usr/idc/ti-tsc.idc
+
+# From Alex Henderson's BBBAndroid project...
+# BBBAndroid - Since the users keep asking for GPIO key mappings for the
+# various LCDs (which enumerate in a variety of values), I'm just going
+# to copy links to the base one a bunch of times and hope for the best.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/gpio_keys_13.kl:system/usr/keylayout/gpio_keys_13.kl
 
 # BeagleBone Black only has 512 MiB RAM
 PRODUCT_PROPERTY_OVERRIDES := \
@@ -92,10 +104,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	camera.omap3
 
-# Include SGX if they exist: they won't on the first build
-ifneq ($(wildcard device/beagleboard/beagleboneblack/sgx/system),)
-    $(call inherit-product, device/beagleboard/beagleboneblack/device-sgx.mk)
-endif
+# Use pixel flinger (libGLES_android.so) as a backup to SGX
+PRODUCT_PACKAGES += \
+        libGLES_android
 
 # Configure the Dalvik heap for a device with 512 MiB RAM
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)

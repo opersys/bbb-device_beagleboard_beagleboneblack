@@ -1,0 +1,47 @@
+From 532fa827e554cd393e4d34ebbb89c46a0ed9ec0a Mon Sep 17 00:00:00 2001
+From: Chris Simonds <chris@2net.co.uk>
+Date: Thu, 14 Jul 2016 07:47:40 +0100
+Subject: [PATCH] Add a4b patch
+
+---
+ patch.sh | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/patch.sh b/patch.sh
+index 46726a2..1e7228d 100644
+--- a/patch.sh
++++ b/patch.sh
+@@ -1137,6 +1137,22 @@ bb_view_lcd () {
+ 	fi
+ }
+ 
++a4b () {
++	# Android4Beagle patch so that 'adb reboot' works
++	echo "dir: a4b"
++	#regenerate="enable"
++	if [ "x${regenerate}" = "xenable" ] ; then
++		start_cleanup
++	fi
++
++	${git} "${DIR}/patches/a4b/0001-Add-reboot-reason-driver-for-am33xx.patch"
++
++	if [ "x${regenerate}" = "xenable" ] ; then
++		number=1
++		cleanup
++	fi
++}
++
+ am33x
+ arm
+ omap
+@@ -1151,6 +1167,7 @@ beagleboy
+ treewide
+ gcc5
+ emmc
++a4b
+ 
+ #element14_bb_view: breaks lcd4
+ #bb_view_lcd
+-- 
+1.9.1
+
