@@ -73,12 +73,3 @@ service iprenew_eth0 /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
-
-# virtual sdcard daemon running as media_rw (1023)
-service sdcard /system/bin/sdcard /data/media /mnt/shell/emulated 1023 1023
-    class late_start
-
-# VNC Server service
-service androidvncserver /system/bin/androidvncserver
-    disabled
-    oneshot
