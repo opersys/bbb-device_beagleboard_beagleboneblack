@@ -15,8 +15,6 @@
 # limitations under the License.
 #
 
-COMMON_GLOBAL_CFLAGS += -DWORKAROUND_BUG_10194508=1
-
 # Use beaglebone camera cape as default
 BOARD_HAVE_CAMERA_CAPE := true
 

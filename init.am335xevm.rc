@@ -60,10 +60,6 @@ on fs
     chmod 0666 /dev/video0
     chown root root /dev/video0
 
-service pvr /system/bin/sgx/rc.pvr start
-    class core
-    oneshot
-
 service dhcpcd_eth0 /system/bin/dhcpcd -aABDKL
     class main
     disabled

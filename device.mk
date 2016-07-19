@@ -82,7 +82,7 @@ PRODUCT_PACKAGES += \
 	libaudioutils
 
 PRODUCT_PACKAGES += \
-        audio.primary.beagleboneblack \
+        audio.primary.am335xevm \
         tinycap \
         tinymix \
         tinyplay
