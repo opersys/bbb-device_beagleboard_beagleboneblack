@@ -18,13 +18,11 @@
 #define LOG_TAG "lights"
 
 #include <cutils/log.h>
-
-#include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <pthread.h>
 
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -37,7 +35,7 @@ static pthread_once_t g_init = PTHREAD_ONCE_INIT;
 static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 char const *const LCD7_FILE
-	= "/sys/class/backlight/backlight.11/brightness";
+	= "/sys/class/backlight/backlight/brightness";
 char const *const LCD3_FILE
 	= "/sys/class/backlight/tps65217-bl/brightness";
 

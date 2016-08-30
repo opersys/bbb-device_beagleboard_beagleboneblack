@@ -32,21 +32,23 @@ on boot
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
 
 # PWM-Backlight for display brightness on LCD7 Cape
-    chmod 0666 /sys/class/backlight/backlight.11/brightness
+    chown system system /sys/class/backlight/backlight/brightness
 # PWM-Backlight for display brightness on LCD3 Cape
-    chmod 0666 /sys/class/backlight/tps65217-bl/brightness
+    chmod system system /sys/class/backlight/tps65217-bl/brightness
 # Disable console cursor, which is otherwise visible on the Android display
     write /sys/class/graphics/fbcon/cursor_blink 0
 
 on fs
     mount_all /fstab.am335xevm
 
+    # Load modules
+    insmod /system/modules/pwm-tiehrpwm.ko
+    insmod /system/modules/tilcdc.ko
+    insmod /system/modules/ti_am335x_tscadc.ko
+    insmod /system/modules/ti_am335x_tsc.ko
+
     # This board does not have battery, force battery-level to 100%
     setprop hw.nobattery true
-
-    # Set Camera permission
-    chmod 0666 /dev/video0
-    chown root root /dev/video0
 
 service dhcpcd_eth0 /system/bin/dhcpcd -aABDKL
     class main

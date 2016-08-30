@@ -23,6 +23,22 @@ PRODUCT_COPY_FILES := \
         $(LOCAL_PATH)/fstab.am335xevm:root/fstab.am335xevm
 endif
 
+# dtbo files for capemanager (Linux 4.1)
+PRODUCT_COPY_FILES += \
+	$(call find-copy-subdir-files,*.dtbo,$(LOCAL_PATH)/dtbo,,root/lib/firmware)
+
+# kernel modules
+# Note: when operating with an LCD screen, tilcdc must be started after
+# cape manager has loaded the corresponding dtbo file. Hence, it is
+# a module, not a built-in. The backlight and touch screen drivers could
+# be built-ins, but it makes more sense for everything associated with the lcd
+# panel to be modular
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/modules/pwm-tiehrpwm.ko:system/modules/pwm-tiehrpwm.ko \
+	$(LOCAL_PATH)/modules/ti_am335x_tsc.ko:system/modules/ti_am335x_tsc.ko \
+	$(LOCAL_PATH)/modules/ti_am335x_tscadc.ko:system/modules/ti_am335x_tscadc.ko \
+	$(LOCAL_PATH)/modules/tilcdc.ko:system/modules/tilcdc.ko
+
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/init.am335xevm.rc:root/init.am335xevm.rc \
 	$(LOCAL_PATH)/init.am335xevm.usb.rc:root/init.am335xevm.usb.rc \
@@ -45,15 +61,8 @@ PRODUCT_COPY_FILES += \
 
 # KeyPads
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    $(LOCAL_PATH)/gpio-keys.kl:system/usr/keylayout/gpio_keys.kl \
     $(LOCAL_PATH)/ti-tsc.idc:system/usr/idc/ti-tsc.idc
-
-# From Alex Henderson's BBBAndroid project...
-# BBBAndroid - Since the users keep asking for GPIO key mappings for the
-# various LCDs (which enumerate in a variety of values), I'm just going
-# to copy links to the base one a bunch of times and hope for the best.
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/gpio_keys_13.kl:system/usr/keylayout/gpio_keys_13.kl
 
 # BeagleBone Black only has 512 MiB RAM
 PRODUCT_PROPERTY_OVERRIDES := \
