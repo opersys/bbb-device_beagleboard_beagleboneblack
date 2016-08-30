@@ -57,7 +57,7 @@ TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 else
 # Build version for installation into internal eMMC
 BOARD_KERNEL_BASE := 0x80008000
-BOARD_KERNEL_CMDLINE := console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro g_ffs.idVendor=0x18d1 g_ffs.idProduct=0xd002 g_ffs.iSerialNumber=0x12345678 androidboot.hardware=am335xevm qemu=1 qemu.gles=0
+BOARD_KERNEL_CMDLINE := console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro androidboot.hardware=am335xevm qemu=1 qemu.gles=0
 
 # Partition sizes for BBB with 2 GiB eMMC (rev A and B)
 TARGET_USERIMAGES_USE_EXT4 := true
