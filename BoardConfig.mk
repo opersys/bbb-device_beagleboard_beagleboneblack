@@ -56,7 +56,11 @@ TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 
 else
 # Build version for installation into internal eMMC
-BOARD_KERNEL_BASE := 0x80008000
+
+# kernel load address = BOARD_KERNEL_BASE + 0x8000 = 0x81080000
+# Ramdisk load address = BOARD_KERNEL_BASE + 0x01000000 = 0x82000000
+BOARD_KERNEL_BASE := 0x81000000
+
 BOARD_KERNEL_CMDLINE := console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro androidboot.hardware=am335xevm qemu=1 qemu.gles=0
 
 # Partition sizes for BBB with 2 GiB eMMC (rev A and B)
