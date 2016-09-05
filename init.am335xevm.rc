@@ -35,17 +35,22 @@ on boot
     chown system system /sys/class/backlight/backlight/brightness
 # PWM-Backlight for display brightness on LCD3 Cape
     chmod system system /sys/class/backlight/tps65217-bl/brightness
-# Disable console cursor, which is otherwise visible on the Android display
-    write /sys/class/graphics/fbcon/cursor_blink 0
 
 on fs
     mount_all /fstab.am335xevm
 
-    # Load modules
+    # Load modules...
     insmod /system/modules/pwm-tiehrpwm.ko
+    # Display controller:
     insmod /system/modules/tilcdc.ko
+    # HDMI controller
+    insmod /system/modules/tda998x.ko
+    # Touch screen (for lcd capes)
     insmod /system/modules/ti_am335x_tscadc.ko
     insmod /system/modules/ti_am335x_tsc.ko
+
+    # Disable console cursor, which is otherwise visible on the Android display
+    write /sys/class/graphics/fbcon/cursor_blink 0
 
     # This board does not have battery, force battery-level to 100%
     setprop hw.nobattery true

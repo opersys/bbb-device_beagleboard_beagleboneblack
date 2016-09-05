@@ -25,7 +25,7 @@ endif
 
 # dtbo files for capemanager (Linux 4.1)
 PRODUCT_COPY_FILES += \
-	$(call find-copy-subdir-files,*.dtbo,$(LOCAL_PATH)/dtbo,,root/lib/firmware)
+	$(call find-copy-subdir-files,*.dtbo,$(LOCAL_PATH)/dtbo,root/lib/firmware)
 
 # kernel modules
 # Note: when operating with an LCD screen, tilcdc must be started after
@@ -37,7 +37,8 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/modules/pwm-tiehrpwm.ko:system/modules/pwm-tiehrpwm.ko \
 	$(LOCAL_PATH)/modules/ti_am335x_tsc.ko:system/modules/ti_am335x_tsc.ko \
 	$(LOCAL_PATH)/modules/ti_am335x_tscadc.ko:system/modules/ti_am335x_tscadc.ko \
-	$(LOCAL_PATH)/modules/tilcdc.ko:system/modules/tilcdc.ko
+	$(LOCAL_PATH)/modules/tilcdc.ko:system/modules/tilcdc.ko \
+	$(LOCAL_PATH)/modules/tda998x.ko:system/modules/tda998x.ko
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/init.am335xevm.rc:root/init.am335xevm.rc \
