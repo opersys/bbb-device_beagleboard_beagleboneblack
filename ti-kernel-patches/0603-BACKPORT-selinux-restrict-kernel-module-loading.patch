@@ -1,0 +1,108 @@
+From 27fddbe7631153e20b3217a57ecc649e54536935 Mon Sep 17 00:00:00 2001
+From: Jeff Vander Stoep <jeffv@google.com>
+Date: Tue, 5 Apr 2016 13:06:27 -0700
+Subject: [PATCH 603/682] BACKPORT: selinux: restrict kernel module loading
+
+Backport notes:
+Backport uses kernel_module_from_file not kernel_read_file hook.
+kernel_read_file replaced kernel_module_from_file in the 4.6 kernel.
+There are no inode_security_() helper functions (also introduced in
+4.6) so the inode lookup is done using the file_inode() helper which
+is standard for kernel version < 4.6.
+
+(Cherry picked from commit 61d612ea731e57dc510472fb746b55cdc017f371)
+
+Utilize existing kernel_read_file hook on kernel module load.
+Add module_load permission to the system class.
+
+Enforces restrictions on kernel module origin when calling the
+finit_module syscall. The hook checks that source type has
+permission module_load for the target type.
+Example for finit_module:
+
+allow foo bar_file:system module_load;
+
+Similarly restrictions are enforced on kernel module loading when
+calling the init_module syscall. The hook checks that source
+type has permission module_load with itself as the target object
+because the kernel module is sourced from the calling process.
+Example for init_module:
+
+allow foo foo:system module_load;
+
+Bug: 27824855
+Change-Id: I64bf3bd1ab2dc735321160642dc6bbfa996f8068
+Signed-off-by: Jeff Vander Stoep <jeffv@google.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+---
+ security/selinux/hooks.c            | 33 +++++++++++++++++++++++++++++++++
+ security/selinux/include/classmap.h |  2 +-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 2067687..5f40fbd 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -3666,6 +3666,38 @@ static int selinux_kernel_module_request(char *kmod_name)
+ 			    SYSTEM__MODULE_REQUEST, &ad);
+ }
+ 
++static int selinux_kernel_module_from_file(struct file *file)
++{
++	struct common_audit_data ad;
++	struct inode_security_struct *isec;
++	struct file_security_struct *fsec;
++	struct inode *inode;
++	u32 sid = current_sid();
++	int rc;
++
++	/* init_module */
++	if (file == NULL)
++		return avc_has_perm(sid, sid, SECCLASS_SYSTEM,
++					SYSTEM__MODULE_LOAD, NULL);
++
++	/* finit_module */
++	ad.type = LSM_AUDIT_DATA_PATH;
++	ad.u.path = file->f_path;
++
++	inode = file_inode(file);
++	isec = inode->i_security;
++	fsec = file->f_security;
++
++	if (sid != fsec->sid) {
++		rc = avc_has_perm(sid, fsec->sid, SECCLASS_FD, FD__USE, &ad);
++		if (rc)
++			return rc;
++	}
++
++	return avc_has_perm(sid, isec->sid, SECCLASS_SYSTEM,
++				SYSTEM__MODULE_LOAD, &ad);
++}
++
+ static int selinux_task_setpgid(struct task_struct *p, pid_t pgid)
+ {
+ 	return current_has_perm(p, PROCESS__SETPGID);
+@@ -5978,6 +6010,7 @@ static struct security_operations selinux_ops = {
+ 	.kernel_act_as =		selinux_kernel_act_as,
+ 	.kernel_create_files_as =	selinux_kernel_create_files_as,
+ 	.kernel_module_request =	selinux_kernel_module_request,
++	.kernel_module_from_file =      selinux_kernel_module_from_file,
+ 	.task_setpgid =			selinux_task_setpgid,
+ 	.task_getpgid =			selinux_task_getpgid,
+ 	.task_getsid =			selinux_task_getsid,
+diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+index eccd61b..ead31e0 100644
+--- a/security/selinux/include/classmap.h
++++ b/security/selinux/include/classmap.h
+@@ -32,7 +32,7 @@ struct security_class_mapping secclass_map[] = {
+ 	    "setsockcreate", NULL } },
+ 	{ "system",
+ 	  { "ipc_info", "syslog_read", "syslog_mod",
+-	    "syslog_console", "module_request", NULL } },
++	    "syslog_console", "module_request", "module_load", NULL } },
+ 	{ "capability",
+ 	  { "chown", "dac_override", "dac_read_search",
+ 	    "fowner", "fsetid", "kill", "setgid", "setuid", "setpcap",
+-- 
+1.9.1
+

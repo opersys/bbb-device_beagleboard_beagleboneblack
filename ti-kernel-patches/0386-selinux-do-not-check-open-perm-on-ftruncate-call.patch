@@ -1,0 +1,48 @@
+From 781bba3b280ba43ffd24db3c472e9a42d528e64a Mon Sep 17 00:00:00 2001
+From: Jeff Vander Stoep <jeffv@google.com>
+Date: Fri, 18 Sep 2015 12:39:46 -0700
+Subject: [PATCH 386/682] selinux: do not check open perm on ftruncate call
+
+Use the ATTR_FILE attribute to distinguish between truncate()
+and ftruncate() system calls. The two other cases where
+do_truncate is called with a filp (and therefore ATTR_FILE is set)
+are for coredump files and for open(O_TRUNC). In both of those cases
+the open permission has already been checked during file open and
+therefore does not need to be repeated.
+
+Commit 95dbf739313f ("SELinux: check OPEN on truncate calls")
+fixed a major issue where domains were allowed to truncate files
+without the open permission. However, it introduced a new bug where
+a domain with the write permission can no longer ftruncate files
+without the open permission, even when they receive an already open
+file.
+
+(cherry picked from commit b21800f304392ee5d20f411c37470183cc779f11)
+
+Bug: 22567870
+Change-Id: I2525a0e244c8d635b2d0c1f966071edbb365a43a
+
+Signed-off-by: Jeff Vander Stoep <jeffv@google.com>
+Acked-by: Stephen Smalley <sds@tycho.nsa.gov>
+Signed-off-by: Paul Moore <pmoore@redhat.com>
+---
+ security/selinux/hooks.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 775469c..7700663 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2955,7 +2955,8 @@ static int selinux_inode_setattr(struct dentry *dentry, struct iattr *iattr)
+ 			ATTR_ATIME_SET | ATTR_MTIME_SET | ATTR_TIMES_SET))
+ 		return dentry_has_perm(cred, dentry, FILE__SETATTR);
+ 
+-	if (selinux_policycap_openperm && (ia_valid & ATTR_SIZE))
++	if (selinux_policycap_openperm && (ia_valid & ATTR_SIZE)
++			&& !(ia_valid & ATTR_FILE))
+ 		av |= FILE__OPEN;
+ 
+ 	return dentry_has_perm(cred, dentry, av);
+-- 
+1.9.1
+

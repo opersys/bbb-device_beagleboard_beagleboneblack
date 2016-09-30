@@ -1,0 +1,10 @@
+# [    2.692070] audit: type=1400 audit(946702811.040:3): avc:  denied  { create } for  pid=1 comm="init" name="sdcard" scontext=u:r:init:s0 tcontext=u:object_r:tmpfs:s0 tclass=lnk_file permissive=1
+
+allow init tmpfs:lnk_file create_file_perms;
+
+# [    4.723371] audit: type=1400 audit(946702813.090:4): avc:  denied  { mounton } for  pid=86 comm="init" path="/cache" dev="rootfs" ino=8118 scontext=u:r:init:s0 tcontext=u:object_r:cache_file:s0 tclass=dir permissive=1
+allow init { cache_file storage_file configfs }:dir mounton;
+
+# /config
+allow init configfs:dir create_dir_perms;
+allow init configfs:{ file lnk_file } create_file_perms;

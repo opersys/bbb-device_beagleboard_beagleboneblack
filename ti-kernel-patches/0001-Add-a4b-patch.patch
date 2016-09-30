@@ -1,0 +1,58 @@
+From b363c8b4fbae39d9c5c90994e26395de835ac2b1 Mon Sep 17 00:00:00 2001
+From: Chris Simonds <chris@2net.co.uk>
+Date: Tue, 13 Sep 2016 10:36:45 +0100
+Subject: [PATCH] Add a4b patch
+
+---
+ patch.sh | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/patch.sh b/patch.sh
+index 1c07155..81b86d4 100644
+--- a/patch.sh
++++ b/patch.sh
+@@ -951,6 +951,33 @@ quieter () {
+ 	fi
+ }
+ 
++a4b () {
++	# Apply SELinux patches to Android4Beagle
++	echo "dir: a4b"
++	#regenerate="enable"
++	if [ "x${regenerate}" = "xenable" ] ; then
++		start_cleanup
++	fi
++        ${git} "${DIR}/patches/a4b/0054-Add-android_aid.h.patch"
++        ${git} "${DIR}/patches/a4b/0062-security-Add-AID_NET_RAW-and-AID_NET_ADMIN-capabilit.patch"
++        ${git} "${DIR}/patches/a4b/0382-security-Add-proper-checks-for-Android-specific-capa.patch"
++        ${git} "${DIR}/patches/a4b/0383-SELinux-Enable-setting-security-contexts-on-rootfs-i.patch"
++        ${git} "${DIR}/patches/a4b/0384-selinux-enable-per-file-labeling-for-debugfs-files.patch"
++        ${git} "${DIR}/patches/a4b/0385-selinux-enable-genfscon-labeling-for-sysfs-and-pstor.patch"
++        ${git} "${DIR}/patches/a4b/0386-selinux-do-not-check-open-perm-on-ftruncate-call.patch"
++        ${git} "${DIR}/patches/a4b/0387-security-add-ioctl-specific-auditing-to-lsm_audit.patch"
++        ${git} "${DIR}/patches/a4b/0388-selinux-extended-permissions-for-ioctls.patch"
++        ${git} "${DIR}/patches/a4b/0389-selinux-Android-kernel-compatibility-with-M-userspac.patch"
++        ${git} "${DIR}/patches/a4b/0390-SELinux-build-fix-for-4.1.patch"
++        ${git} "${DIR}/patches/a4b/0516-UPSTREAM-selinux-fix-bug-in-conditional-rules-handli.patch"
++        ${git} "${DIR}/patches/a4b/0603-BACKPORT-selinux-restrict-kernel-module-loading.patch"
++
++	if [ "x${regenerate}" = "xenable" ] ; then
++		number=1
++		cleanup
++	fi
++}
++
+ ###
+ reverts
+ backports
+@@ -961,6 +988,7 @@ pru_rpmsg
+ bbb_overlays
+ beaglebone
+ quieter
++a4b
+ 
+ 
+ packaging () {
+-- 
+2.1.4
+

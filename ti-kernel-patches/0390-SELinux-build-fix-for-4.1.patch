@@ -1,0 +1,43 @@
+From 079f46e71a10c6149040b46d41ac06b3df612947 Mon Sep 17 00:00:00 2001
+From: Amit Pundir <amit.pundir@linaro.org>
+Date: Fri, 30 Oct 2015 00:47:53 +0530
+Subject: [PATCH 390/682] SELinux: build fix for 4.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Commit "SELinux: Enable setting security contexts on rootfs inodes."
+cherry-picked in experimental/android-4.1 used a now obsolete flag
+SE_SBLABELSUPP. Rename it to SBLABEL_MNT as intended by upstream
+commit 12f348b9dcf6 "SELinux: rename SE_SBLABELSUPP to SBLABEL_MNT",
+otherwise we run into following build error:
+
+  CC      security/selinux/hooks.o
+security/selinux/hooks.c: In function ‘sb_finish_set_opts’:
+security/selinux/hooks.c:459:19: error: ‘SE_SBLABELSUPP’ undeclared (first use in this function)
+   sbsec->flags |= SE_SBLABELSUPP;
+                   ^
+security/selinux/hooks.c:459:19: note: each undeclared identifier is reported only once for each function it appears in
+make[2]: *** [security/selinux/hooks.o] Error 1
+
+Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+---
+ security/selinux/hooks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index ef87440..2067687 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -456,7 +456,7 @@ static int sb_finish_set_opts(struct super_block *sb)
+ 	 * setting SELinux context on in-core inodes.
+ 	 */
+ 	if (strncmp(sb->s_type->name, "rootfs", sizeof("rootfs")) == 0)
+-		sbsec->flags |= SE_SBLABELSUPP;
++		sbsec->flags |= SBLABEL_MNT;
+ 
+ 	/* Initialize the root inode. */
+ 	rc = inode_doinit_with_dentry(root_inode, root);
+-- 
+1.9.1
+

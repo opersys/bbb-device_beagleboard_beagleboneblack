@@ -35,6 +35,8 @@ USE_OPENGL_RENDERER := true
 
 WITH_DEXPREOPT := true
 
+BOARD_SEPOLICY_DIRS += device/beagleboard/beagleboneblack/sepolicy
+
 ifneq ($(filter beagleboneblack_sd, $(TARGET_PRODUCT)),)
 # Build version to boot from uSD card
 
@@ -61,7 +63,7 @@ else
 # Ramdisk load address = BOARD_KERNEL_BASE + 0x01000000 = 0x82000000
 BOARD_KERNEL_BASE := 0x81000000
 
-BOARD_KERNEL_CMDLINE := console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro androidboot.hardware=am335xevm qemu=1 qemu.gles=0 cape_universal=enable
+BOARD_KERNEL_CMDLINE := console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro androidboot.hardware=am335xevm qemu=1 qemu.gles=0 cape_universal=enable security=selinux androidboot.selinux=permissive
 
 # Partition sizes for BBB with 2 GiB eMMC (rev A and B)
 TARGET_USERIMAGES_USE_EXT4 := true

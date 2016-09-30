@@ -1,0 +1,8 @@
+# Suppress audit logs like this one:
+# [   22.508775] type=1400 audit(946693868.850:25): avc: denied { ioctl } for pid=144 comm="Binder_2" path="socket:[10385]" dev="sockfs" ino=10385 ioctlcmd=7704 scontext=u:r:surfaceflinger:s0 tcontext=u:r:surfaceflinger:s0 tclass=unix_stream_socket permissive=1
+ 
+# Address denials for ioctl rules. This is required after latest aosp security update
+# Seems to be a result of a bug introduced in AOSP 6.0.1_r55 (approx), for fix, see
+# https://android-review.googlesource.com/#/c/198885/4/libs/binder/Parcel.cpp
+allow surfaceflinger self:unix_stream_socket 0x7704;
+
