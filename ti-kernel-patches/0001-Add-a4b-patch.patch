@@ -1,17 +1,17 @@
-From b363c8b4fbae39d9c5c90994e26395de835ac2b1 Mon Sep 17 00:00:00 2001
+From 1fd79550eb08071905de563699a3c85dbae8dd7c Mon Sep 17 00:00:00 2001
 From: Chris Simonds <chris@2net.co.uk>
-Date: Tue, 13 Sep 2016 10:36:45 +0100
-Subject: [PATCH] Add a4b patch
+Date: Tue, 27 Jun 2017 09:54:50 +0100
+Subject: [PATCH] a4b patch
 
 ---
- patch.sh | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ patch.sh | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/patch.sh b/patch.sh
-index 1c07155..81b86d4 100644
+index 30b4905..504d760 100644
 --- a/patch.sh
 +++ b/patch.sh
-@@ -951,6 +951,33 @@ quieter () {
+@@ -976,6 +976,34 @@ quieter () {
  	fi
  }
  
@@ -22,6 +22,7 @@ index 1c07155..81b86d4 100644
 +	if [ "x${regenerate}" = "xenable" ] ; then
 +		start_cleanup
 +	fi
++        ${git} "${DIR}/patches/a4b/0002-Reboot-reason-patch-for-BBB.patch"
 +        ${git} "${DIR}/patches/a4b/0054-Add-android_aid.h.patch"
 +        ${git} "${DIR}/patches/a4b/0062-security-Add-AID_NET_RAW-and-AID_NET_ADMIN-capabilit.patch"
 +        ${git} "${DIR}/patches/a4b/0382-security-Add-proper-checks-for-Android-specific-capa.patch"
@@ -42,15 +43,15 @@ index 1c07155..81b86d4 100644
 +	fi
 +}
 +
- ###
- reverts
- backports
-@@ -961,6 +988,7 @@ pru_rpmsg
+ sync_mainline_dtc () {
+ 	echo "dir: dtc"
+ 	#regenerate="enable"
+@@ -1032,6 +1060,7 @@ pru_rpmsg
  bbb_overlays
  beaglebone
  quieter
 +a4b
- 
+ sync_mainline_dtc
  
  packaging () {
 -- 
