@@ -69,10 +69,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PROPERTY_OVERRIDES := \
       ro.config.low_ram=true
 
-# Explicitly specify dpi, otherwise the icons don't show up correctly with SGX enabled
-PRODUCT_PROPERTY_OVERRIDES += \
-       ro.sf.lcd_density=160
-
 PRODUCT_PROPERTY_OVERRIDES += \
 	persist.sys.strictmode.visual=0 \
 	persist.sys.strictmode.disable=1
@@ -107,12 +103,6 @@ PRODUCT_PACKAGES += \
 # Backlight HAL (liblights)
 PRODUCT_PACKAGES += \
 	lights.am335xevm
-
-PRODUCT_PACKAGES += \
-	androidvncserver
-
-PRODUCT_PACKAGES += \
-	camera.omap3
 
 # Use pixel flinger (libGLES_android.so) as a backup to SGX
 PRODUCT_PACKAGES += \
