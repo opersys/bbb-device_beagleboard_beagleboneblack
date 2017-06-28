@@ -32,7 +32,7 @@
     <bool name="config_showNavigationBar">true</bool>
 
     <!-- Minimum screen brightness allowed by the power manager. -->
-    <integer name="config_screenBrightnessDim">50</integer>
+    <integer name="config_screenBrightnessDim">120</integer>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
