@@ -1,3 +1,3 @@
-bootargs=console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro androidboot.hardware=am335xevm qemu=1 qemu.gles=0 cape_universal=enable security=selinux androidboot.selinux=permissive
+bootargs=console=ttyS0,115200n8 androidboot.console=ttyS0 rootwait ro androidboot.hardware=am335xevm qemu=1 qemu.gles=0 cape_universal=enable security=selinux androidboot.selinux=permissive consoleblank=0
 bootcmd=mmc rescan ; fatload mmc 0 82000000 uImage ; fatload mmc 0 83000000 uRamdisk ; bootm 82000000 83000000
 uenvcmd=boot
