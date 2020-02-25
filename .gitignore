@@ -38,3 +38,11 @@ captures/
 
 # Keystore files
 *.jks
+
+tore files
+*.jks
+*.jks
+
+# kernel modules
+modules/
+zImage-dtb

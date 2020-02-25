@@ -14,4 +14,12 @@
 # limitations under the License.
 #
 
-PRODUCT_MAKEFILES := $(LOCAL_DIR)/beagleboneblack.mk $(LOCAL_DIR)/beagleboneblack_sd.mk
+PRODUCT_MAKEFILES := \
+	$(LOCAL_DIR)/beagleboneblack_emmc.mk \
+	$(LOCAL_DIR)/beagleboneblack_sd.mk
+
+COMMON_LUNCH_CHOICES := \
+	beagleboneblack_sd-eng \
+	beagleboneblack_emmc-eng \
+	beagleboneblack_sd-userdebug \
+	beagleboneblack_emmc-userdebug

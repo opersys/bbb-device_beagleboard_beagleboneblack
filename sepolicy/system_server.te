@@ -3,4 +3,4 @@
 # Address denials for ioctl rules. This is required after latest aosp security update
 # Seems to be a result of a bug introduced in AOSP 6.0.1_r55 (approx), for fix, see
 # https://android-review.googlesource.com/#/c/198885/4/libs/binder/Parcel.cpp
-allow system_server self:unix_stream_socket 0x7704;
+#allow system_server self:unix_stream_socket 0x7704;
