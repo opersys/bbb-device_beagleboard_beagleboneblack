@@ -22,4 +22,8 @@
 
     <!-- Disable Lock Screen -->
     <bool name="def_lockscreen_disabled">true</bool>
+
+    <!-- Defaults to being provisioned so we don't have to rely on the
+         Settings app. -->
+    <bool name="def_device_provisioned">true</bool>
 </resources>

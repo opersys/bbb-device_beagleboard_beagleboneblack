@@ -1,15 +1,15 @@
 import init.am335xevm.usb.rc
 
 on early-init
-    mount debugfs debugfs /sys/kernel/debug
+    mount debugfs debugfs /sys/kernel/debug mode=755
 
 on init
-    verity_load_state
+    #verity_load_state
 
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
- 
+
     # create directory for mounting usb drives
     mkdir /storage/usb1 0666 system system
     symlink /storage/usb1 /usbdrive
@@ -34,7 +34,7 @@ on boot
 # PWM-Backlight for display brightness on LCD7 Cape
     chown system system /sys/class/backlight/backlight/brightness
 # PWM-Backlight for display brightness on LCD3 Cape
-    chmod system system /sys/class/backlight/tps65217-bl/brightness
+#    chmod system system /sys/class/backlight/tps65217-bl/brightness
 
 on fs
     mount_all /fstab.am335xevm
